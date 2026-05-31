@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.\\\\build.bat)",
+      "Bash(cmd /c build.bat)"
+    ]
+  }
+}

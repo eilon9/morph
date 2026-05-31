@@ -1,0 +1,42 @@
+name: Build macOS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Upload Morph VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: Morph-VST3-macOS
+          path: build/Morph_artefacts/Release/VST3/Morph.vst3
+
+      - name: Upload MorphListener VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: MorphListener-VST3-macOS
+          path: build/MorphListener_artefacts/Release/VST3/MorphListener.vst3
+
+      - name: Upload Morph Standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: Morph-Standalone-macOS
+          path: build/Morph_artefacts/Release/Standalone/Morph.app
