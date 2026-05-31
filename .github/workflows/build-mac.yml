@@ -12,7 +12,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
       - name: Configure CMake
         run: |
@@ -24,19 +24,19 @@ jobs:
         run: cmake --build build --config Release --parallel
 
       - name: Upload Morph VST3
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: Morph-VST3-macOS
           path: build/Morph_artefacts/Release/VST3/Morph.vst3
 
       - name: Upload MorphListener VST3
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: MorphListener-VST3-macOS
           path: build/MorphListener_artefacts/Release/VST3/MorphListener.vst3
 
       - name: Upload Morph Standalone
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: Morph-Standalone-macOS
           path: build/Morph_artefacts/Release/Standalone/Morph.app
