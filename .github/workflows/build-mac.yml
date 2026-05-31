@@ -7,6 +7,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-macos:
     runs-on: macos-latest
@@ -27,16 +30,16 @@ jobs:
         uses: actions/upload-artifact@v4.6.2
         with:
           name: Morph-VST3-macOS
-          path: build/Morph_artefacts/Release/VST3/Morph.vst3
+          path: build/Morph_artefacts/**/VST3/Morph.vst3
 
       - name: Upload MorphListener VST3
         uses: actions/upload-artifact@v4.6.2
         with:
           name: MorphListener-VST3-macOS
-          path: build/MorphListener_artefacts/Release/VST3/MorphListener.vst3
+          path: build/MorphListener_artefacts/**/VST3/MorphListener.vst3
 
       - name: Upload Morph Standalone
         uses: actions/upload-artifact@v4.6.2
         with:
           name: Morph-Standalone-macOS
-          path: build/Morph_artefacts/Release/Standalone/Morph.app
+          path: build/Morph_artefacts/**/Standalone/Morph.app
