@@ -3,6 +3,11 @@
 
 #if JUCE_WINDOWS
 #include <windows.h>
+#else
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #endif
 
 // -------------------------------------------------------------------
@@ -73,8 +78,9 @@ namespace SharedMemory
 #if JUCE_WINDOWS
         return MapViewOfFile ((HANDLE) h, FILE_MAP_ALL_ACCESS, 0, 0, size);
 #else
-        return mmap (nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED,
-                     (int) (intptr_t) h, 0);
+        void* ptr = mmap (nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED,
+                          (int) (intptr_t) h, 0);
+        return (ptr == MAP_FAILED) ? nullptr : ptr;
 #endif
     }
 
@@ -163,11 +169,20 @@ namespace SharedMemory
     // Find a free index by trying each one.
     // Returns the index and fills in the MappedRegion (map kept alive).
     // If none free, returns -1 and mr is untouched.
+    static juce::String shmName (int index)
+    {
+#if JUCE_WINDOWS
+        return "Local\\Morph_Data_" + juce::String (index);
+#else
+        return "/Morph_Data_" + juce::String (index);
+#endif
+    }
+
     static int claimFreeIndex (MappedRegion& mr)
     {
         for (int i = 0; i < MaxListeners; ++i)
         {
-            juce::String dataName = "Local\\Morph_Data_" + juce::String (i);
+            juce::String dataName = shmName (i);
             auto candidate = create (dataName, sizeof (ListenerAudioData));
             if (candidate.ptr == nullptr)
                 continue;
@@ -199,7 +214,7 @@ namespace SharedMemory
     // Open a specific data index (no claiming, just opening)
     static MappedRegion openIndex (int index)
     {
-        juce::String dataName = "Local\\Morph_Data_" + juce::String (index);
+        juce::String dataName = shmName (index);
         return create (dataName, sizeof (ListenerAudioData));
     }
 

@@ -15,7 +15,7 @@ public:
 private:
     void timerCallback() override;
 
-    MorphProcessor& processor;
+    MorphProcessor& morphProcessor;
 
     static constexpr int numSlots = 8;
 

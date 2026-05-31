@@ -128,7 +128,7 @@ bool MorphProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 
     // Input bus is optional and ignored (audio comes from shared memory).
     // Accept disabled or any 1-2 channel layout.
-    auto& in = layouts.getMainInputChannelSet();
+    const auto& in = layouts.getMainInputChannelSet();
     if (!in.isDisabled() && (in.size() < 1 || in.size() > 2))
         return false;
 

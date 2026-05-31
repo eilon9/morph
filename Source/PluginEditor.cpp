@@ -5,7 +5,7 @@ static const juce::Colour ACCENT  { 0xff7c7cff };
 static const juce::Colour DIMTEXT { 0xff888899 };
 
 MorphEditor::MorphEditor (MorphProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+    : AudioProcessorEditor (&p), morphProcessor (p)
 {
     setSize (560, 420);
 
@@ -31,7 +31,7 @@ MorphEditor::MorphEditor (MorphProcessor& p)
         addAndMakeVisible (slotStatus[i]);
 
         slotAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment> (
-            processor.apvts,
+            morphProcessor.apvts,
             "ch" + juce::String (i),
             slotBoxes[i]);
     }
@@ -43,7 +43,7 @@ MorphEditor::MorphEditor (MorphProcessor& p)
     addAndMakeVisible (blendSlider);
 
     blendAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (
-        processor.apvts, "blend", blendSlider);
+        morphProcessor.apvts, "blend", blendSlider);
 
     blendLabel.setText ("Morph blend", juce::dontSendNotification);
     blendLabel.setJustificationType (juce::Justification::centredLeft);
@@ -65,8 +65,8 @@ void MorphEditor::timerCallback()
 
     for (int i = 0; i < numSlots; ++i)
     {
-        float level = processor.getSlotLevel (i);
-        bool connected = processor.isSlotConnected (i);
+        float level = morphProcessor.getSlotLevel (i);
+        bool connected = morphProcessor.isSlotConnected (i);
 
         if (!connected)
         {

@@ -8,11 +8,11 @@ static const juce::Colour DIMTEXT  { 0xff888899 };
 static const juce::Colour GREEN    { 0xff44dd44 };
 
 ListenerEditor::ListenerEditor (ListenerProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+    : AudioProcessorEditor (&p), listenerProcessor (p)
 {
     setSize (240, 120);
 
-    indexLabel.setText ("Listener #" + juce::String (processor.getListenerIndex() + 1),
+    indexLabel.setText ("Listener #" + juce::String (listenerProcessor.getListenerIndex() + 1),
                         juce::dontSendNotification);
     indexLabel.setFont (juce::Font (juce::FontOptions (28.0f)).boldened());
     indexLabel.setJustificationType (juce::Justification::centred);
@@ -34,7 +34,7 @@ ListenerEditor::~ListenerEditor()
 
 void ListenerEditor::timerCallback()
 {
-    int idx = processor.getListenerIndex();
+    int idx = listenerProcessor.getListenerIndex();
 
     if (idx < 0)
     {
@@ -43,7 +43,7 @@ void ListenerEditor::timerCallback()
         return;
     }
 
-    int count = processor.getProcessBlockCount();
+    int count = listenerProcessor.getProcessBlockCount();
     if (count != lastProcessBlockCount)
     {
         lastProcessBlockCount = count;
@@ -63,7 +63,7 @@ void ListenerEditor::paint (juce::Graphics& g)
 {
     g.fillAll (BG);
 
-    g.setColour (processor.getListenerIndex() >= 0 ? ACCENT : juce::Colours::red);
+    g.setColour (listenerProcessor.getListenerIndex() >= 0 ? ACCENT : juce::Colours::red);
     g.drawRect (getLocalBounds(), 2);
 
     g.setColour (juce::Colours::white);

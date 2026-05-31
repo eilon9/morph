@@ -16,7 +16,7 @@ public:
 private:
     void timerCallback() override;
 
-    ListenerProcessor& processor;
+    ListenerProcessor& listenerProcessor;
 
     juce::Label indexLabel;
     juce::Label statusLabel;
